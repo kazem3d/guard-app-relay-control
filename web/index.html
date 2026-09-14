@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeoGuard Relay Controller</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="app-header">
+    <h1>NeoGuard Relay Controller</h1>
+    <button class="btn" id="logout-btn">Log out</button>
+  </header>
+
+  <div id="must-change-panel" class="panel" hidden>
+    <h2>Set a new password</h2>
+    <p class="status-msg">This device is using its factory-default password. Choose a new one before continuing.</p>
+    <div class="field"><label for="mc-current">Current password</label><input type="password" id="mc-current"></div>
+    <div class="field"><label for="mc-new">New password</label><input type="password" id="mc-new"></div>
+    <button class="btn primary" id="mc-submit">Set password</button>
+    <p class="status-msg" id="mc-status" hidden></p>
+  </div>
+
+  <div id="app" hidden>
+    <nav class="tabs">
+      <button data-tab="device" class="active">Device</button>
+      <button data-tab="network">Network</button>
+      <button data-tab="relays">Relays</button>
+    </nav>
+
+    <section id="tab-device" class="tab">
+      <div class="panel">
+        <h2>Device</h2>
+        <dl class="device-grid" id="device-grid"></dl>
+      </div>
+    </section>
+
+    <section id="tab-network" class="tab" hidden>
+      <div class="panel">
+        <h2>Network</h2>
+        <div class="radio-row">
+          <label><input type="radio" name="net-mode" value="dhcp"> DHCP</label>
+          <label><input type="radio" name="net-mode" value="static"> Static</label>
+        </div>
+        <div class="field"><label for="net-hostname">Hostname</label><input type="text" id="net-hostname"></div>
+        <div class="field"><label for="net-ip">IP Address</label><input type="text" id="net-ip" placeholder="192.168.1.50"></div>
+        <div class="field"><label for="net-netmask">Netmask</label><input type="text" id="net-netmask" placeholder="255.255.255.0"></div>
+        <div class="field"><label for="net-gateway">Gateway</label><input type="text" id="net-gateway" placeholder="192.168.1.1"></div>
+        <div class="field"><label for="net-dns">DNS</label><input type="text" id="net-dns" placeholder="8.8.8.8, 1.1.1.1"></div>
+        <button class="btn primary" id="net-save">Save Network Settings</button>
+        <button class="btn" id="net-confirm">Confirm Network Settings</button>
+        <p class="hint">After changing the IP address, the device keeps the old
+          settings ready to restore for 60 seconds. If the new address loads
+          this page, log in and click "Confirm Network Settings" within that
+          window to keep it — otherwise it reverts automatically.</p>
+        <p class="status-msg" id="net-status" hidden></p>
+      </div>
+    </section>
+
+    <section id="tab-relays" class="tab" hidden>
+      <div id="relay-list"></div>
+    </section>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

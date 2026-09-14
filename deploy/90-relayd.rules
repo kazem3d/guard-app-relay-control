@@ -1,0 +1,29 @@
+// polkit rule granting the relayd service account exactly the D-Bus
+// permissions it needs to read/apply network settings through
+// NetworkManager and to set the system hostname through systemd-hostnamed.
+// Install to /etc/polkit-1/rules.d/90-relayd.rules.
+//
+// Scoped narrowly to the "relayd" user rather than any authenticated user,
+// so this box's network settings can't be changed by any other local
+// account that happens to exist on it.
+polkit.addRule(function(action, subject) {
+    if (subject.user != "relayd") {
+        return polkit.Result.NOT_HANDLED;
+    }
+
+    var networkManagerActions = [
+        "org.freedesktop.NetworkManager.settings.modify.system",
+        "org.freedesktop.NetworkManager.network-control",
+        "org.freedesktop.NetworkManager.enable-disable-network",
+        "org.freedesktop.NetworkManager.checkpoint-rollback",
+    ];
+    if (networkManagerActions.indexOf(action.id) !== -1) {
+        return polkit.Result.YES;
+    }
+
+    if (action.id == "org.freedesktop.hostname1.set-static-hostname") {
+        return polkit.Result.YES;
+    }
+
+    return polkit.Result.NOT_HANDLED;
+});
